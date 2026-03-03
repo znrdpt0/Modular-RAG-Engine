@@ -1,16 +1,15 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 from app.routes import router
 from app.vector_store import init_vector_store
 
-# Lifespan: Uygulama başlarken ve kapanırken çalışacak olayları yönetir
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Uygulama BAŞLARKEN çalışacak kod:
+    # Uygulama başlarken veritabınını ayağı kaldır
     print("Sistem başlatılıyor, veritabanı kontrol ediliyor...")
     init_vector_store()
     yield
-    # Uygulama KAPANIRKEN çalışacak kod (Şu an boş ama ileride bağlantıları kapatmak için kullanılabilir)
     print("Sistem kapatılıyor...")
 
 # Uygulama örneğini oluştur
@@ -20,11 +19,17 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Geliştirme aşamasında her yere açık bırakıyoruz.
+    allow_credentials=True,
+    allow_methods=["*"],  # GET, POST, PUT vb. hepsine izin ver
+    allow_headers=["*"],
+)
 
-# Yazdığımız rotaları (upload, vb.) ana uygulamaya bağla
 app.include_router(router)
 
-# Health-Check Endpoint'i (Sunucunun ayakta olup olmadığını kontrol etmek için)
+# Health-Check Endpoint
 @app.get("/")
 def health_check():
     return {"status": "ok", "message": "RAG Backend tıkır tıkır çalışıyor 🚀"}

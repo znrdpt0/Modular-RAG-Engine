@@ -9,19 +9,20 @@ COLLECTION_NAME = "rag_documents_gemini"
 
 def init_vector_store():
     """
-    Uygulama başladığında veritabanında gerekli 'tabloyu' (collection) oluşturur.
+    Uygulama başladığında Collection oluşturur
     """
     # Mevcut koleksiyonları kontrol et
     collections = client.get_collections().collections
+    # Koleksiyonlar arasında bizimki varsa true döndür
     exists = any(c.name == COLLECTION_NAME for c in collections)
 
     if not exists:
         print(f"'{COLLECTION_NAME}' koleksiyonu oluşturuluyor...")
-        # Koleksiyon oluşturma: SQL'deki 'CREATE TABLE' gibi düşün.
+        # Koleksiyon oluştur
         client.create_collection(
             collection_name=COLLECTION_NAME,
             vectors_config=models.VectorParams(
-                size=3072, #Gemini 3072 boyutlu çıktı verir
+                size=3072, #Gemini 3072 boyutu
                 distance=models.Distance.COSINE # Benzerlik ölçüm yöntemi
             )
         )
@@ -36,6 +37,6 @@ def upsert_documents(vectors, payloads, ids):
         points=models.Batch(
             ids=ids,
             vectors=vectors,
-            payloads=payloads
+            payloads=payloads # Metadata
         )
     )
