@@ -18,9 +18,9 @@ def get_embeddings(texts: list[str]) -> list[list[float]]:
     # SDK'dan gelen cevabın içindeki float dizilerini (values) ayıklıyoruz
     return [embedding.values for embedding in response.embeddings]
 
-#genel bir tekrar yap
-#init_py bak
-#frontend oluştur
+#genel bir tekrar yap *
+#init_py bak *
+#frontend oluştur 
 #dockerization yap
 #akış diyagramı oluştur
 """Doc bazlı filtreleme
@@ -33,5 +33,5 @@ Simple evaluation logging
 bunlara bak """
 #yeni sonuçları akış diyagramına ekle
 #aws deploy et 
-#read.me hazırla
+#readme hazırla
 

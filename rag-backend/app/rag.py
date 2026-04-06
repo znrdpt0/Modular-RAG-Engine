@@ -48,20 +48,23 @@ def ask_question(query: str, limit: int = 3, filename: str = None, history : lis
             history_text += f"{role_name}: {msg.text}\n"
         history_text += "\n" # Araya boşluk koyalım
 
-    # 4. GENERATION: LLM için mükemmel, kısıtlayıcı bir Prompt hazırla
+    # 4. GENERATION: Prompt'a yorum yeteneği ekliyoruz
     prompt = f"""
-    Sen uzman bir yapay zeka asistanısın. Aşağıda sana bazı referans döküman parçaları ve önceki sohbet geçmişi verilmiştir.
-    Kullanıcının GÜNCEL sorusunu SADECE bu dökümanlara ve bağlama dayanarak cevapla.
-    Eğer sorunun cevabı dökümanlarda yoksa, "Bunun cevabını yüklenen dökümanda bulamadım." de ve asla kendi bilginden uydurma (hallucination yapma).
-     
+    Sen uzman bir yapay zeka asistanısın. Aşağıda sana referans döküman parçaları ve önceki sohbet geçmişi verilmiştir.
+    
+    Görevlerin:
+    1. Kullanıcının güncel sorusunu SADECE bu dökümanlara ve geçmiş bağlama dayanarak cevapla.
+    2. Kullanıcı "sence", "neden", "karşılaştır" gibi analiz/yorum gerektiren sorular sorarsa; dökümandaki bilgileri kullanarak KENDİ MANTIK YÜRÜTMENİ yapabilirsin. Analizlerini dökümandaki gerçeklere dayandır.
+    3. Eğer sorunun cevabı veya analiz yapmak için gereken temel bilgi dökümanlarda HİÇ yoksa, "Bunun cevabını dökümanlarda bulamadım." de.
+
+    ÖNCEKİ SOHBET GEÇMİŞİ:
     {history_text}
 
-    Referans Dökümanlar:
+    REFERANS DÖKÜMANLAR:
     {context}
 
-    Kullanıcının Sorusu: {query}
+    KULLANICININ GÜNCEL SORUSU: {query}
     """
-
     # 5. LLM'e soruyu yönelt
     response = llm_client.models.generate_content_stream(
         model='gemini-2.5-flash',
@@ -71,4 +74,4 @@ def ask_question(query: str, limit: int = 3, filename: str = None, history : lis
 
     for chunk in response:
         if chunk.text:
-            yield chunk.text
+            yield chunk.text #return bütünü döndürür yield parça çıktıkça gönderir.

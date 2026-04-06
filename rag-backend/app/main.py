@@ -32,4 +32,4 @@ app.include_router(router)
 # Health-Check Endpoint
 @app.get("/")
 def health_check():
-    return {"status": "ok", "message": "RAG Backend tıkır tıkır çalışıyor 🚀"}
+    return {"status": "ok", "message": "RAG Backend hatasız çalışıyor"}

@@ -73,7 +73,9 @@ async def ask_endpoint(request: QuestionRequest):
 
     try:
         # RAG fonksiyonumuzu çağırıyoruz
-        answer = ask_question(query=request.query, filename=request.filename)
+        answer = ask_question(query=request.query,
+                               filename=request.filename,
+                               history = request.history)
         
         return StreamingResponse(answer, media_type="text/plain")
     except Exception as e:
