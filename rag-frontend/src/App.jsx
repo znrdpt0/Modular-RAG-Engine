@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 function App() {
-  const API_BASE_URL = 'http://35.157.208.84/:8000'; //AWS public 8000 port
+  const API_BASE_URL = 'http://35.157.208.84:8000'; //AWS public 8000 port
   // --- 1. SOHBET STATE'LERİ ---
   const [messages, setMessages] = useState([
     { role: 'model', text: 'Merhaba! Ben senin RAG asistanınım. Yüklediğin PDF hakkında bana her şeyi sorabilirsin.' }
