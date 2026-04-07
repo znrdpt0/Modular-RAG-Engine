@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 function App() {
+  const API_BASE_URL = 'http://35.157.208.84/:8000'; //AWS public 8000 port
   // --- 1. SOHBET STATE'LERİ ---
   const [messages, setMessages] = useState([
     { role: 'model', text: 'Merhaba! Ben senin RAG asistanınım. Yüklediğin PDF hakkında bana her şeyi sorabilirsin.' }
@@ -38,7 +39,7 @@ function App() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/upload', {
+      const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
         // Dikkat: FormData kullanırken 'Content-Type' başlığını BİZ BELİRLEMEYİZ. 
         // Tarayıcı bunu dosya sınırlarına (boundary) göre otomatik ayarlar.
@@ -77,7 +78,7 @@ function App() {
     ]);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/ask', {
+      const response = await fetch(`${API_BASE_URL}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
