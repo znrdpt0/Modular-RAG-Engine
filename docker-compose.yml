@@ -12,7 +12,7 @@ services:
       - ./qdrant_storage:/qdrant/storage
     restart: unless-stopped 
 
-  # 2. MUTFAK: Backend
+  # 2. Backend
   backend:
     build: ./rag-backend
     container_name: rag_backend
@@ -22,9 +22,9 @@ services:
       - .env
     depends_on:
       - qdrant
-    restart: unless-stopped
+    restart: unless-stopped  
 
-  # 3. RESTORAN: Frontend
+  # 3. Frontend
   frontend:
     build: ./rag-frontend
     container_name: rag_frontend

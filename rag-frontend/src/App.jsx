@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 function App() {
-  const API_BASE_URL = 'http://35.157.208.84:8000'; //AWS public 8000 port
+  const API_BASE_URL = 'http://35.157.208.84:8000'; //***AWS public 8000 port***
   // --- 1. SOHBET STATE'LERİ ---
   const [messages, setMessages] = useState([
     { role: 'model', text: 'Merhaba! Ben senin RAG asistanınım. Yüklediğin PDF hakkında bana her şeyi sorabilirsin.' }
@@ -41,8 +41,6 @@ function App() {
     try {
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
-        // Dikkat: FormData kullanırken 'Content-Type' başlığını BİZ BELİRLEMEYİZ. 
-        // Tarayıcı bunu dosya sınırlarına (boundary) göre otomatik ayarlar.
         body: formData
       });
 
@@ -125,10 +123,11 @@ function App() {
         <div>
           <h1 className="text-2xl font-bold text-blue-400">Modular RAG Engine</h1>
           <p className="text-sm text-gray-400">Belgelerinle akıllı sohbet et</p>
+          <p className="text-sm text-bleu-400">Created by znrdpt0</p>
         </div>
       </div>
 
-      {/* YENİ EKLENEN: PDF Yükleme Paneli */}
+      {/*PDF Yükleme Paneli */}
       <div className="w-full max-w-3xl bg-gray-800 p-4 border-b border-gray-700 flex flex-col gap-3">
         <div className="flex gap-2 items-center">
           <input 
