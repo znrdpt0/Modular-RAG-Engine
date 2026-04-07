@@ -1,0 +1,31 @@
+name: Docker Build and Test CI
+
+# 1. TETİKLEYİCİ: Bu otomasyon ne zaman çalışsın?
+on:
+  push:
+    branches: [ "main" ] # Sadece ana dala (main) bir şey pushlanınca çalış
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    # 2. ORTAM: GitHub bize bir Ubuntu makinesi versin
+    runs-on: ubuntu-latest
+
+    steps:
+    # 3. ADIM: Kodları GitHub'dan bu sanal makineye çek
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 4. ADIM: Docker Compose'un yüklü olduğunu kontrol et ve sistemin inşa olup olmadığını test et
+    - name: Build the Docker images
+      run: |
+        docker compose build
+
+    # 5. ADIM: (Opsiyonel ama Müthiş) Konteynırları ayağa kaldır ve sağlıklı mı bak
+    - name: Test Running Containers
+      run: |
+        docker compose up -d
+        docker ps
+        sleep 10 # Sistemlerin kendine gelmesi için biraz bekle
+        curl -f http://localhost:8000/docs || exit 1 # Backend kapısı açık mı kontrol et
