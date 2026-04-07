@@ -28,4 +28,38 @@ jobs:
         docker compose up -d
         docker ps
         sleep 10 # Sistemlerin kendine gelmesi için biraz bekle
-        curl -f http://localhost:8000/docs || exit 1 # Backend kapısı açık mı kontrol et
+        curl -f http://localhost:8000/docs || exit 1 # Backend kapısı açık mı kontrol etname: Docker Build and Test CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build the Docker images
+      run: |
+        docker compose build
+
+    # YENİ EKLENEN ADIM: Test için sahte bir .env dosyası oluşturuyoruz
+    - name: Create dummy .env file
+      run: |
+        touch .env
+        echo "GEMINI_API_KEY=dummy_test_key" >> .env
+        echo "QDRANT_URL=http://qdrant:6333" >> .env
+        echo "CHUNK_SIZE=500" >> .env
+        echo "CHUNK_OVERLAP=100" >> .env
+
+    - name: Test Running Containers
+      run: |
+        docker compose up -d
+        docker ps
+        sleep 10
+        curl -f http://localhost:8000/docs || exit 1
